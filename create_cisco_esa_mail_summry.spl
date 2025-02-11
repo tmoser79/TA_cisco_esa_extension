@@ -1,0 +1,44 @@
+[Generate ESA Summary 3.0]
+action.email.useNSSubject = 1
+alert.track = 0
+cron_schedule = */5 * * * *
+description = Fill summary index with ICID/MID/DCID transaction tuples every 5 minutes.
+dispatch.earliest_time = -7m@m
+dispatch.latest_time = now
+display.events.fields = ["host","source","sourcetype","validity","watch"]
+display.events.maxLines = 0
+display.general.type = statistics
+display.page.search.tab = statistics
+display.visualizations.show = 0
+request.ui_dispatch_app = penta
+request.ui_dispatch_view = search
+schedule_window = auto
+search = | set union \
+    [ search index=test sourcetype=cisco:esa:textmail earliest=-7m@m latest=-2m@m "Info: Start MID" \
+    | rex field=_cd "(?<bucket>\d+):(?<address>\d+)" \
+        ] \
+    [ search index=test sourcetype=cisco:esa:textmail NOT "Info: Start MID" earliest=-7m@m latest=now \
+    | rex field=_cd "(?<bucket>\d+):(?<address>\d+)" \
+        ] \
+| sort 0 - _time,address \
+| eval mid = internal_message_id \
+| table _time mid icid dcid message_subject sender recipient vendor_action reason file_name attachment_type antivirus_status virus_vendor_category \
+| search mid="*" \
+| fillnull VALUE=0 icid mid dcid \
+| eval attachments=file_name.".".attachment_type\
+| stats earliest(_time) as mid_start max(icid) as icid max(dcid) as dcid values(message_subject) as message_subject values(sender) as sender values(recipient) as recipient values(vendor_action) as vendor_action values(reason) as reason values(attachments) as attachments values(antivirus_status) as antivirus_status values(virus_vendor_category) as virus_vendor_category by mid \
+| eval vendor_action=mvjoin(vendor_action,"|"), reason=mvjoin(reason,"|"), attachments=mvjoin(attachments,"|"), antivirus_status=mvjoin(antivirus_status,"|"), virus_vendor_category=mvjoin(virus_vendor_category,"|")\
+| join icid \
+    [ set union \
+        [ search index=test sourcetype=cisco:esa:textmail earliest=-7m@m latest=-2m@m icid=* AND "Info: New SMTP" \
+        | rex field=_cd "(?<bucket>\d+):(?<address>\d+)" \
+            ] \
+        [ search index=test sourcetype=cisco:esa:textmail icid=* NOT internal_message_id=* earliest=-7m@m latest=now \
+        | rex field=_cd "(?<bucket>\d+):(?<address>\d+)" \
+            ] \
+    | sort 0 - _time,address \
+    | table _time icid src_host, src_ip \
+    | fillnull VALUE=0 icid mid dcid \
+    | stats earliest(_time) as icid_start values(src_host) as src_host values(src_ip) as src_ip by icid ] \
+| eval _time=mid_start\
+| collect index=test_summary
