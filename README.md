@@ -1,4 +1,4 @@
-# Splunk Add-on for Cisco ESA — Extension (`TA_cisco_esa_extension`)
+# Splunk Add-on for Cisco ESA — Extension
 
 An extension to the official [Splunk Add-on for Cisco ESA](https://splunkbase.splunk.com/app/1761)
 (Splunkbase app 1761). The base add-on parses raw Cisco Email Security Appliance
@@ -112,35 +112,6 @@ disabled = false
 2. Copy this add-on to `$SPLUNK_HOME/etc/apps/TA_cisco_esa_extension`.
 3. Ensure the summary index exists and the macros point at the correct indexes.
 4. Restart Splunk (or reload the relevant configs) and enable the saved search.
-
-## Development environment
-
-Because a Technology Add-on only runs inside Splunk, the included bootstrap
-installs a local Splunk Enterprise instance and deploys this repository into it
-as an app for testing:
-
-```bash
-bash .cursor/setup_splunk.sh
-```
-
-This installs Splunk to `/opt/splunk` (once), seeds an admin account without
-committing any credential, and symlinks this repo into
-`$SPLUNK_HOME/etc/apps/TA_cisco_esa_extension`. Validate the configuration with
-`btool`:
-
-```bash
-# Configuration merges cleanly
-/opt/splunk/bin/splunk btool check --app=TA_cisco_esa_extension --debug
-
-# Macros resolve to the expected indexes
-/opt/splunk/bin/splunk btool macros list --app=TA_cisco_esa_extension
-
-# The scheduled search is registered
-/opt/splunk/bin/splunk btool savedsearches list --app=TA_cisco_esa_extension
-```
-
-When running as a Cursor Cloud Agent, `.cursor/environment.json` performs the
-install automatically and starts Splunk on boot.
 
 ## License / support
 
