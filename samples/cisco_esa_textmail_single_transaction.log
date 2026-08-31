@@ -1,0 +1,19 @@
+Mon Aug 31 10:00:00 2026 Info: New SMTP ICID 123456 interface Data 1 (10.0.0.5) address 203.0.113.10 reverse dns host mail.partner.example verified yes
+Mon Aug 31 10:00:00 2026 Info: ICID 123456 ACCEPT SG UNKNOWNLIST match sbrs[0.0:10.0] SBRS 2.7
+Mon Aug 31 10:00:01 2026 Info: Start MID 654321 ICID 123456
+Mon Aug 31 10:00:01 2026 Info: MID 654321 ICID 123456 From: <alice@partner.example>
+Mon Aug 31 10:00:01 2026 Info: MID 654321 ICID 123456 RID 0 To: <bob@company.example>
+Mon Aug 31 10:00:01 2026 Info: MID 654321 Message-ID '<CA+abc123def456@partner.example>'
+Mon Aug 31 10:00:01 2026 Info: MID 654321 Subject "Quarterly report Q3"
+Mon Aug 31 10:00:01 2026 Info: MID 654321 ready 20480 bytes from <alice@partner.example>
+Mon Aug 31 10:00:01 2026 Info: MID 654321 matched all recipients for per-recipient policy DEFAULT in the inbound table
+Mon Aug 31 10:00:02 2026 Info: MID 654321 attachment 'quarterly_report.pdf'
+Mon Aug 31 10:00:02 2026 Info: MID 654321 interim AV verdict using Sophos CLEAN
+Mon Aug 31 10:00:02 2026 Info: MID 654321 antivirus negative
+Mon Aug 31 10:00:02 2026 Info: MID 654321 queued for delivery
+Mon Aug 31 10:00:03 2026 Info: New SMTP DCID 78901 interface 10.0.0.5 address 198.51.100.20 port 25
+Mon Aug 31 10:00:03 2026 Info: Delivery start DCID 78901 MID 654321 to RID [0]
+Mon Aug 31 10:00:04 2026 Info: Message done DCID 78901 MID 654321 to RID [0]
+Mon Aug 31 10:00:04 2026 Info: MID 654321 RID [0] Response '2.0.0 Ok: queued as 9F0A1C2D3E'
+Mon Aug 31 10:00:04 2026 Info: Message finished MID 654321 done
+Mon Aug 31 10:00:09 2026 Info: DCID 78901 close
