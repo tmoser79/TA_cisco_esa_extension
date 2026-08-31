@@ -1,0 +1,2 @@
+_time,mid,mid_start,icid,icid_start,dcid,src_host,src_ip,sender,recipient,message_subject,attachments,vendor_action,reason,antivirus_status,virus_vendor_category
+2026-08-31 10:00:01,654321,2026-08-31 10:00:01,123456,2026-08-31 10:00:00,78901,mail.partner.example,203.0.113.10,alice@partner.example,bob@company.example,"Quarterly report Q3",quarterly_report.pdf,"queued for delivery",,negative,
