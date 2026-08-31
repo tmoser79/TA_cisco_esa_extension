@@ -46,6 +46,23 @@ Key settings:
 | `dispatch.earliest_time` / `dispatch.latest_time` | `-7m@m` / `now` | Overlapping window so in-flight transactions are captured. |
 | `disabled` | `true` | **Disabled by default** — enable it after configuring the indexes (see below). |
 
+## Sample events
+
+[`samples/cisco_esa_textmail_single_transaction.log`](samples/cisco_esa_textmail_single_transaction.log)
+contains the raw `cisco:esa:textmail` log lines for **one complete message
+transaction**, illustrating how a single email is spread across many events tied
+together by the connection and message identifiers:
+
+- **ICID `123456`** — the inbound SMTP connection (`New SMTP ICID ...`), carrying
+  the source host/IP.
+- **MID `654321`** — the message (`Start MID ... ICID ...`), carrying subject,
+  sender, recipient, attachment, and antivirus verdict.
+- **DCID `78901`** — the outbound delivery connection
+  (`New SMTP DCID ... MID ...`).
+
+Ingesting this sample into your raw index and running the scheduled search
+produces a single summarized event for MID `654321` in the summary index.
+
 ## Contents
 
 | File | Purpose |
