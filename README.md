@@ -63,6 +63,30 @@ together by the connection and message identifiers:
 Ingesting this sample into your raw index and running the scheduled search
 produces a single summarized event for MID `654321` in the summary index.
 
+[`samples/cisco_esa_summary_output.csv`](samples/cisco_esa_summary_output.csv)
+shows exactly that resulting summary event (headers + one row) — how the many
+raw log lines above collapse into a single per-message record written to the
+summary index:
+
+| Summary field | Value | Derived from |
+| --- | --- | --- |
+| `_time` / `mid_start` | `2026-08-31 10:00:01` | Earliest event time for the MID (`Start MID`). |
+| `mid` | `654321` | `internal_message_id`. |
+| `icid` / `icid_start` | `123456` / `2026-08-31 10:00:00` | Injection connection and its start time. |
+| `dcid` | `78901` | Delivery connection. |
+| `src_host` / `src_ip` | `mail.partner.example` / `203.0.113.10` | `New SMTP ICID` line (joined via ICID). |
+| `sender` / `recipient` | `alice@partner.example` / `bob@company.example` | `From:` / `To:` lines. |
+| `message_subject` | `Quarterly report Q3` | `Subject` line. |
+| `attachments` | `quarterly_report.pdf` | `file_name . "." . attachment_type`. |
+| `antivirus_status` | `negative` | `antivirus` verdict line. |
+| `vendor_action`, `reason`, `virus_vendor_category` | (single/empty here) | Multi-value fields joined with `\|`. |
+
+> Note: field extraction is performed by the base
+> [Splunk Add-on for Cisco ESA](https://splunkbase.splunk.com/app/1761), so the
+> exact set and formatting of values depends on its parsing. In this sample
+> `attachment_type` and `virus_vendor_category` are not present in the raw logs,
+> so those derived fields are empty.
+
 ## Contents
 
 | File | Purpose |
