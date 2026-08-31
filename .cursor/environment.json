@@ -1,0 +1,13 @@
+{
+  "name": "TA_cisco_esa_extension (Splunk add-on dev)",
+  "user": "ubuntu",
+  "install": "bash .cursor/setup_splunk.sh",
+  "start": "/opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt",
+  "terminals": [
+    {
+      "name": "splunkd-log",
+      "command": "sleep 15; tail -F /opt/splunk/var/log/splunk/splunkd.log"
+    }
+  ],
+  "ports": [8000, 8089]
+}
