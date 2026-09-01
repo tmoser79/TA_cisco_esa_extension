@@ -7,3 +7,8 @@ __pycache__/
 
 # Locally generated dev credentials (never commit)
 .dev_admin_password
+
+# Environment files (ignore all .env.* except tracked examples)
+.env.*
+!.env.example
+!.env.staging.example
